@@ -5,7 +5,7 @@ type: software
 authors:
   - family-names: "Lyra Junior"
     given-names: "Paulo Cilas Morais"
-repository-code: "https://github.com/paulocilasjr/BRCA_integration-code"
+repository-code: "https://github.com/FunctionalAssaYIntegration/BRCA1-BRCA2-Large-integration"
 version: 0.1.0
 date-released: 2026-07-13
-license: MIT
+license: Apache-2.0

@@ -3,14 +3,12 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .config import (
+from config import (
     DEFAULT_EVE_WORKBOOK,
     DEFAULT_INPUT_WORKBOOK,
     DEFAULT_OTHER_POINTS_WORKBOOK,
     DEFAULT_RESULTS_DIR,
 )
-from .validation import ValidationError
-
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -60,7 +58,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    from .pipeline import build_supplementary_workbook
+    from validation import ValidationError
+    from pipeline import build_supplementary_workbook
 
     try:
         outputs = build_supplementary_workbook(
@@ -76,7 +75,7 @@ def main() -> None:
         raise SystemExit(f"Input/output validation failed: {exc}") from exc
 
     print(f"Wrote supplementary workbook: {outputs.workbook}")
-    from .pipeline import supp_fig3_prefix
+    from pipeline import supp_fig3_prefix
 
     print(f"Wrote Supp Fig 2 files with prefix: {outputs.figure_prefix}")
     print(f"Wrote Supp Fig 3 files with prefix: {supp_fig3_prefix(outputs.figure_prefix)}")

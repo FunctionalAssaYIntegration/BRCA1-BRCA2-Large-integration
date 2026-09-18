@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "brca-integration-code"
+name = "brca1-brca2-large-integration"
 version = "0.1.0"
 description = "Reproducible BRCA1/BRCA2 supplementary table generation pipeline"
 readme = "README.md"
@@ -11,7 +11,7 @@ requires-python = ">=3.11"
 authors = [
     {name = "Paulo Cilas Morais Lyra Junior"},
 ]
-license = "MIT"
+license = "Apache-2.0"
 dependencies = [
     "matplotlib==3.11.0",
     "numpy==2.5.1",
@@ -22,19 +22,34 @@ dependencies = [
     "upsetplot==0.9.0",
 ]
 
-[project.optional-dependencies]
-test = ["pytest>=9,<10"]
-
 [project.urls]
-Repository = "https://github.com/paulocilasjr/BRCA_integration-code"
-
-[tool.pytest.ini_options]
-addopts = "-ra"
-pythonpath = ["src"]
-testpaths = ["tests"]
+Repository = "https://github.com/FunctionalAssaYIntegration/BRCA1-BRCA2-Large-integration"
 
 [project.scripts]
-brca-build-tables = "brca_integration.cli:main"
+brca-build-tables = "cli:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.setuptools]
+package-dir = {"" = "src"}
+py-modules = [
+    "cli",
+    "config",
+    "domains",
+    "enrich_depletion_table",
+    "frequency_enrichment",
+    "gnomad_class",
+    "grantham",
+    "pipeline",
+    "sup_table_7",
+    "sup_table_8",
+    "sup_table_9_10",
+    "sup_table_11",
+    "sup_table_12_13",
+    "sup_table_14_15",
+    "sup_table_16",
+    "sup_table_17",
+    "sup_table_18_19",
+    "supp_fig2",
+    "supp_fig3",
+    "upset_graphs",
+    "validation",
+]

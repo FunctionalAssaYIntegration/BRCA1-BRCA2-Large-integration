@@ -481,12 +481,12 @@ def main() -> None:
         "--predictor",
         "--alpha",
         dest="predictor",
-        default="dataset/eve/EVE_BRCA12_scores.xlsx",
+        default="data/eve/EVE_BRCA12_scores.xlsx",
         help="EVE workbook with BRCA1/BRCA2 tabs. --alpha is retained as a deprecated alias.",
     )
     ap.add_argument(
         "--other-points",
-        default="dataset/ACMG_other_points.xlsx",
+        default="data/ACMG_other_points.xlsx",
         help="Workbook with additional ACMG point columns (BRCA1/BRCA2 tabs)",
     )
     args = ap.parse_args()

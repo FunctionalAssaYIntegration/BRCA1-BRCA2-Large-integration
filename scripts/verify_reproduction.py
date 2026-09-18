@@ -8,21 +8,17 @@ import hashlib
 import sys
 from pathlib import Path
 
-import pandas as pd
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SRC_PATH = REPO_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
-from brca_integration.validation import validate_generated_workbook  # noqa: E402
-
 
 EXPECTED_INPUT_SHA256 = {
-    "dataset/SUPP_TABLES_BRCA12_APR_2026.xlsx": (
+    "data/SUPP_TABLES_BRCA12_APR_2026.xlsx": (
         "71e7d32f0ec3ab6f69633b6ae90167a7acd2cdf24567751f61e41bcf71f42904"
     ),
-    "dataset/ACMG_other_points.xlsx": (
+    "data/ACMG_other_points.xlsx": (
         "12eb9270ac578bb621a64716a6ab3555f5acc25fd53b40a419977306f232dcd9"
     ),
 }
@@ -84,6 +80,8 @@ def verify_input_checksums() -> None:
 
 
 def verify_metrics(workbook: Path) -> None:
+    import pandas as pd
+
     for sheet_name, expected in EXPECTED_TABLE_METRICS.items():
         frame = pd.read_excel(workbook, sheet_name=sheet_name, header=1)
         observed_rows = len(frame)
@@ -122,13 +120,15 @@ def verify_figures(prefix: Path) -> None:
 
 def main() -> None:
     args = parse_args()
+    from validation import validate_generated_workbook
+
     if not args.skip_input_checksums:
         verify_input_checksums()
     validate_generated_workbook(args.workbook)
     print(f"[OK] Workbook structure and error scan: {args.workbook}")
     verify_metrics(args.workbook)
     if args.figure_prefix:
-        from brca_integration.pipeline import supp_fig3_prefix
+        from pipeline import supp_fig3_prefix
 
         verify_figures(args.figure_prefix)
         verify_figures(supp_fig3_prefix(args.figure_prefix))

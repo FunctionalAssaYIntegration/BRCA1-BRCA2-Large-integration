@@ -67,7 +67,7 @@ def find_value_in_sheet2(sheet2, row_letter, col_letter):
 
 def main():
     # Input file path
-    input_file = "./dataset/Grantham.xlsx"
+    input_file = "./data/Grantham.xlsx"
     output_file = "grantham_result.xlsx"
     
     try:

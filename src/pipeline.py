@@ -10,31 +10,31 @@ from uuid import uuid4
 
 import pandas as pd
 
-from .config import (
+from config import (
     DEFAULT_EVE_WORKBOOK,
     DEFAULT_FIGURES_DIR,
     DEFAULT_INPUT_WORKBOOK,
     DEFAULT_OTHER_POINTS_WORKBOOK,
     DEFAULT_RESULTS_DIR,
 )
-from .figures.supp_fig2 import generate_supp_fig2
-from .figures.supp_fig3 import generate as generate_supp_fig3
-from .tables.sup_table_7 import (
+from supp_fig2 import generate_supp_fig2
+from supp_fig3 import generate as generate_supp_fig3
+from sup_table_7 import (
     build_track_classification_map as build_brca1_track_classification_map,
     summarize_tables,
     write_detailed_sup_table_7,
     write_sup_table_7,
 )
-from .tables.sup_table_8 import (
+from sup_table_8 import (
     build_track_classification_map as build_brca2_track_classification_map,
     summarize_tables as summarize_tables_8,
     write_detailed_sup_table_8,
     write_sup_table_8,
 )
-from .tables.sup_table_11 import write_sup_table_11
-from .tables.sup_table_12_13 import write_sup_table_12_13
-from .tables.sup_table_14_15 import write_sup_table_14_15
-from .tables.sup_table_16 import (
+from sup_table_11 import write_sup_table_11
+from sup_table_12_13 import write_sup_table_12_13
+from sup_table_14_15 import write_sup_table_14_15
+from sup_table_16 import (
     BRCA1_FEATURES,
     BRCA2_FEATURES,
     build_assignment_df,
@@ -42,9 +42,9 @@ from .tables.sup_table_16 import (
     load_features,
     write_sup_table_16,
 )
-from .tables.sup_table_17 import write_sup_table_17
-from .tables.sup_table_18_19 import write_sup_tables_18_19
-from .validation import validate_generated_workbook, validate_inputs
+from sup_table_17 import write_sup_table_17
+from sup_table_18_19 import write_sup_tables_18_19
+from validation import validate_generated_workbook, validate_inputs
 
 SHEETS = {
     "Sup Table 1": "BRCA1_table",

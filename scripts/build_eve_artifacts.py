@@ -4,9 +4,9 @@ Download EVE BRCA1/BRCA2 variant predictions and build the normalized workbook.
 
 This script recreates the ignored large files used by the repository:
 
-  dataset/eve/BRCA1_HUMAN.EVE.variants.zip
-  dataset/eve/BRCA2_HUMAN.EVE.variants.zip
-  dataset/eve/EVE_BRCA12_scores.xlsx
+  data/eve/BRCA1_HUMAN.EVE.variants.zip
+  data/eve/BRCA2_HUMAN.EVE.variants.zip
+  data/eve/EVE_BRCA12_scores.xlsx
 
 Run from the repository root:
 
@@ -27,17 +27,12 @@ from pathlib import Path
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
-try:
-    import pandas as pd
-except ImportError as exc:  # pragma: no cover - only used for user-facing setup errors
-    raise SystemExit(
-        "Missing dependency: pandas. Install pandas and openpyxl, then rerun this script."
-    ) from exc
+pd = None
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EVE_DIR = REPO_ROOT / "dataset" / "eve"
-DEFAULT_SOURCE_WORKBOOK = REPO_ROOT / "dataset" / "SUPP_TABLES_BRCA12_APR_2026.xlsx"
+DEFAULT_EVE_DIR = REPO_ROOT / "data" / "eve"
+DEFAULT_SOURCE_WORKBOOK = REPO_ROOT / "data" / "SUPP_TABLES_BRCA12_APR_2026.xlsx"
 DEFAULT_OUTPUT_WORKBOOK = DEFAULT_EVE_DIR / "EVE_BRCA12_scores.xlsx"
 
 EVE_SOURCE_SITE = "https://evemodel.org/"
@@ -70,6 +65,19 @@ PROTEINS = {
         "sha256": "ba15c69673dab8bb6ce73f18407e10bf4106eebdafdf84caaea9db39a01038d8",
     },
 }
+
+
+def require_pandas():
+    global pd
+    if pd is None:
+        try:
+            import pandas as pandas_module
+        except ImportError as exc:  # pragma: no cover - user-facing setup error
+            raise SystemExit(
+                "Missing dependency: pandas. Install pandas and openpyxl, then rerun this script."
+            ) from exc
+        pd = pandas_module
+    return pd
 
 
 def parse_args() -> argparse.Namespace:
@@ -185,6 +193,7 @@ def ensure_archives(
 
 
 def load_eve_archive(zip_path: Path, expected_member: str) -> pd.DataFrame:
+    pd = require_pandas()
     with zipfile.ZipFile(zip_path) as archive:
         members = archive.namelist()
         if expected_member not in members:
@@ -213,6 +222,7 @@ def load_eve_archive(zip_path: Path, expected_member: str) -> pd.DataFrame:
 
 
 def load_master(source_workbook: Path, sheet_name: str) -> pd.DataFrame:
+    pd = require_pandas()
     master = pd.read_excel(source_workbook, sheet_name=sheet_name, header=1)
     missing = [column for column in MASTER_COLUMNS if column not in master.columns]
     if missing:
@@ -229,6 +239,7 @@ def build_normalized_workbook(
     archive_paths: dict[str, Path],
     output_workbook: Path,
 ) -> None:
+    pd = require_pandas()
     if not source_workbook.exists():
         raise SystemExit(f"Missing source workbook: {source_workbook}")
 

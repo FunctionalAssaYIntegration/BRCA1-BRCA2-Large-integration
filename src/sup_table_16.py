@@ -33,7 +33,7 @@ from openpyxl.utils import get_column_letter
 # Feature lists
 # --------------------------------------------------------------------------------------
 try:
-    from brca_integration.reference.domains import (
+    from domains import (
         BRCA1_FEATURES as _BRCA1_FEATURES,
         BRCA2_FEATURES as _BRCA2_FEATURES,
     )
