@@ -21,11 +21,11 @@ the generated artifacts.
 
 | Input | Role | Integrity/provenance |
 | --- | --- | --- |
-| `dataset/SUPP_TABLES_BRCA12_APR_2026.xlsx` | Master variant, metadata, reference-panel, and comments sheets (Tables 1–6) | Deposited; hash in `checksums.sha256` |
-| `dataset/ACMG_other_points.xlsx` | PM2, segregation, and allele-frequency point inputs for Tables 18–19 | Deposited; hash in `checksums.sha256` |
+| `data/SUPP_TABLES_BRCA12_APR_2026.xlsx` | Master variant, metadata, reference-panel, and comments sheets (Tables 1–6) | Deposited; hash in `checksums.sha256` |
+| `data/ACMG_other_points.xlsx` | PM2, segregation, and allele-frequency point inputs for Tables 18–19 | Deposited; hash in `checksums.sha256` |
 | `BRCA1_HUMAN.EVE.variants.zip` | BRCA1 EVE predictions | EVE full-length model; downloaded and checksum-verified |
 | `BRCA2_HUMAN.EVE.variants.zip` | BRCA2 EVE predictions | EVE full-length model; downloaded and checksum-verified |
-| `src/brca_integration/reference/domains.py` | Curated BRCA1/BRCA2 protein feature intervals used in Table 16 | Version-controlled constants |
+| `src/domains.py` | Curated BRCA1/BRCA2 protein feature intervals used in Table 16 | Version-controlled constants |
 
 The EVE normalizer joins on wild-type amino acid (`T2`), one-based protein
 position (`T3`), and alternate amino acid (`T4`). It retains the source variant
@@ -34,8 +34,8 @@ coverage is 10,958/11,009 for BRCA1 and 15,542/20,169 for BRCA2.
 
 ## Deposited legacy inputs
 
-`dataset/AlphaMissense_Calculations_all.xlsx` and
-`dataset/evidence_criteria_v6_BRCA12.xlsx` are retained as analysis-history
+`data/AlphaMissense_Calculations_all.xlsx` and
+`data/evidence_criteria_v6_BRCA12.xlsx` are retained as analysis-history
 artifacts. They are not read by the current primary pipeline. Tables 18–19 use
 EVE, not AlphaMissense, to avoid predictor circularity described in
 `docs/eve_replacement_implementation.md`.
@@ -43,7 +43,7 @@ EVE, not AlphaMissense, to avoid predictor circularity described in
 ## Explicit curated overrides
 
 All overrides are visible near the top of
-`src/brca_integration/tables/sup_table_18_19.py` rather than being silently
+`src/sup_table_18_19.py` rather than being silently
 edited in an output workbook:
 
 | Gene | Variant | Override |

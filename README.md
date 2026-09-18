@@ -1,7 +1,7 @@
 # BRCA1/BRCA2 functional evidence integration
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
 This repository contains the code and deposited inputs used to generate the
 BRCA1/BRCA2 supplementary tables and Supplementary Figure 2 for the associated
@@ -22,8 +22,8 @@ The commands below start from a fresh clone. Python 3.14.6 was used for the
 final repository audit; Python 3.11 or newer is required.
 
 ```sh
-git clone https://github.com/paulocilasjr/BRCA_integration-code.git
-cd BRCA_integration-code
+git clone https://github.com/FunctionalAssaYIntegration/BRCA1-BRCA2-Large-integration.git
+cd BRCA1-BRCA2-Large-integration
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
@@ -38,7 +38,7 @@ python scripts/build_eve_artifacts.py
 
 The script verifies the exact EVE archives used in the analysis by SHA-256. If
 the EVE server's certificate chain is rejected locally, review the documented
-URLs in [`dataset/eve/README.md`](dataset/eve/README.md) and use
+URLs in [`data/eve/README.md`](data/eve/README.md) and use
 `--insecure-tls`; checksums remain mandatory.
 
 Build and verify all publication artifacts:
@@ -79,21 +79,22 @@ coverage, figure presence, and final classification counts.
 ## Repository layout
 
 ```text
-dataset/                      Deposited source workbooks
+data/                      Deposited source workbooks
+  LICENSE                  CC BY 4.0 license for deposited data
   eve/README.md               EVE sources, hashes, and coverage
 docs/                         Methods and reproducibility notes
 scripts/
   build_eve_artifacts.py      Download/normalize checksum-pinned EVE data
   build_supplementary_tables.py
   verify_reproduction.py      Machine-check the publication outputs
-src/brca_integration/
+src/
+  cli.py                      Command-line interface
   pipeline.py                 Atomic end-to-end pipeline
   validation.py               Input/output integrity checks
-  tables/                     Supplementary table calculations and writers
-  figures/supp_fig2.py        Supplementary Figure 2 generation
-  figures/supp_fig3.py        Supplementary Figure 3 (UpSet) generation
-  reference/                  Curated BRCA1/BRCA2 domain constants
-tests/                        Fast regression tests
+  sup_table_*.py              Supplementary table calculations and writers
+  supp_fig2.py                Supplementary Figure 2 generation
+  supp_fig3.py                Supplementary Figure 3 (UpSet) generation
+  domains.py                  Curated BRCA1/BRCA2 domain constants
 checksums.sha256              SHA-256 manifest for deposited workbooks
 requirements-lock.txt         Fully resolved audited runtime
 ```
@@ -116,7 +117,7 @@ shasum -a 256 -c checksums.sha256
 The EVE files are not redistributed here because they are large and externally
 hosted. Their source URLs, model identifiers, exact archive hashes, join keys,
 and expected coverage are documented in
-[`dataset/eve/README.md`](dataset/eve/README.md).
+[`data/eve/README.md`](data/eve/README.md).
 
 ## Other entry points
 
@@ -125,7 +126,7 @@ All of these invoke the same primary pipeline:
 ```sh
 python main.py
 python scripts/build_supplementary_tables.py
-PYTHONPATH=src python -m brca_integration
+PYTHONPATH=src python -m cli
 python -m pip install -e .
 brca-build-tables
 ```
@@ -135,20 +136,20 @@ inputs is supported, but the publication verifier's expected hashes and counts
 then no longer apply; use `--skip-input-checksums` only for an intentional
 sensitivity or update analysis.
 
-The modules under `src/brca_integration/analyses/` are retained exploratory
-manuscript-support analyses and are not part of the primary reproduction path.
-Some require historical source files that are not deposited; they must not be
-used to regenerate the reported tables.
+Exploratory manuscript-support modules such as `src/enrich_depletion_table.py`,
+`src/frequency_enrichment.py`, `src/gnomad_class.py`, `src/grantham.py`, and
+`src/upset_graphs.py` are not part of the primary reproduction path. Some
+require historical source files that are not deposited; they must not be used
+to regenerate the reported tables.
 
 ## Testing
 
 ```sh
-python -m pip install -e '.[test]'
-pytest
+make test
 ```
 
 The full publication check is the end-to-end build followed by
-`scripts/verify_reproduction.py`, not the fast unit suite alone.
+`scripts/verify_reproduction.py`, not the syntax check alone.
 
 ## Citation and license
 
@@ -157,9 +158,13 @@ associated article receives its final DOI, cite the article as the scientific
 source and archive the corresponding repository release (for example, on
 Zenodo) so the manuscript points to an immutable version.
 
-The software is released under the [MIT License](LICENSE). Source workbooks and
-third-party EVE data may be subject to separate terms; the software license does
-not relicense those data.
+Unless otherwise noted, source code in this repository is licensed under the
+[Apache License 2.0](LICENSE). Data contained in the `data/` directory are
+licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0)
+license; see [`data/LICENSE`](data/LICENSE).
+
+Large third-party EVE data are downloaded from the upstream source and may be
+subject to upstream terms. They are not redistributed in this repository.
 
 ## Scope and interpretation
 

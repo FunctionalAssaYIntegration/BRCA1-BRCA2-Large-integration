@@ -14,7 +14,7 @@ def _ensure_src_on_path() -> None:
 
 def main() -> None:
     _ensure_src_on_path()
-    from brca_integration.cli import main as cli_main
+    from cli import main as cli_main
 
     cli_main()
 

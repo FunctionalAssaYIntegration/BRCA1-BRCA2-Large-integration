@@ -21,7 +21,7 @@ CPT-1 was evaluated first as a fallback because the reviewer also mentioned CPT-
 The GitHub repository is:
 
 ```text
-https://github.com/paulocilasjr/BRCA_integration-code
+https://github.com/FunctionalAssaYIntegration/BRCA1-BRCA2-Large-integration
 ```
 
 The final EVE archives, normalized EVE workbook, and generated result workbook are not committed because they are large/generated files. They can be recreated from the committed source workbook and the public EVE endpoints.
@@ -29,11 +29,11 @@ The final EVE archives, normalized EVE workbook, and generated result workbook a
 Repository files required:
 
 ```text
-dataset/SUPP_TABLES_BRCA12_APR_2026.xlsx
-dataset/ACMG_other_points.xlsx
+data/SUPP_TABLES_BRCA12_APR_2026.xlsx
+data/ACMG_other_points.xlsx
 scripts/build_eve_artifacts.py
-dataset/eve/README.md
-brca_integration.tables.sup_table_18_19
+data/eve/README.md
+src/sup_table_18_19.py
 main.py
 ```
 
@@ -53,9 +53,9 @@ python3 scripts/build_eve_artifacts.py
 This command downloads the EVE per-protein variant archives, verifies the SHA256 hashes recorded below, and writes:
 
 ```text
-dataset/eve/BRCA1_HUMAN.EVE.variants.zip
-dataset/eve/BRCA2_HUMAN.EVE.variants.zip
-dataset/eve/EVE_BRCA12_scores.xlsx
+data/eve/BRCA1_HUMAN.EVE.variants.zip
+data/eve/BRCA2_HUMAN.EVE.variants.zip
+data/eve/EVE_BRCA12_scores.xlsx
 ```
 
 If local TLS certificate verification fails for the EVE site, confirm the HTTPS URLs below and rerun:
@@ -91,7 +91,7 @@ Column substitutions:
 
 - `Alpha Missense Score` was replaced by `EVE Score`
 - `Alpha missense classification` was replaced by `EVE classification`
-- `ACMG PP3/BP4 in silico predictor points` is now computed from EVE classes instead of the AlphaMissense-derived column in `dataset/ACMG_other_points.xlsx`
+- `ACMG PP3/BP4 in silico predictor points` is now computed from EVE classes instead of the AlphaMissense-derived column in `data/ACMG_other_points.xlsx`
 
 Downstream columns affected by the substitution:
 
@@ -99,7 +99,7 @@ Downstream columns affected by the substitution:
 - `FINAL ClinVar Classification`
 - `Notes`, only where the final class changes a reference-panel disregard note
 
-Unchanged non-predictor ACMG evidence columns still loaded from `dataset/ACMG_other_points.xlsx`:
+Unchanged non-predictor ACMG evidence columns still loaded from `data/ACMG_other_points.xlsx`:
 
 - `ACMG PM2 points`
 - `ACMG PP1/BS4 segregation points`
@@ -164,13 +164,13 @@ https://doi.org/10.1186/s13059-025-03575-w
 
 ## Local Files Created Or Recreated
 
-The following EVE files are created under `dataset/eve/` by `scripts/build_eve_artifacts.py`. They are ignored by Git and are not exposed in the GitHub repository:
+The following EVE files are created under `data/eve/` by `scripts/build_eve_artifacts.py`. They are ignored by Git and are not exposed in the GitHub repository:
 
 | file | size in bytes | SHA256 |
 | --- | ---: | --- |
-| `dataset/eve/BRCA1_HUMAN.EVE.variants.zip` | 10,219,048 | `d99a1f4b383154afdec9cca35e5a27c91184f63e41a01805461a9b8d280a0b39` |
-| `dataset/eve/BRCA2_HUMAN.EVE.variants.zip` | 16,023,212 | `ba15c69673dab8bb6ce73f18407e10bf4106eebdafdf84caaea9db39a01038d8` |
-| `dataset/eve/EVE_BRCA12_scores.xlsx` | 1,804,353 | `c5e9b06fe5d03e5e6cb4603ee83f640f0f5e45d840910f773d0afcf224c0fb59` |
+| `data/eve/BRCA1_HUMAN.EVE.variants.zip` | 10,219,048 | `d99a1f4b383154afdec9cca35e5a27c91184f63e41a01805461a9b8d280a0b39` |
+| `data/eve/BRCA2_HUMAN.EVE.variants.zip` | 16,023,212 | `ba15c69673dab8bb6ce73f18407e10bf4106eebdafdf84caaea9db39a01038d8` |
+| `data/eve/EVE_BRCA12_scores.xlsx` | 1,804,353 | `c5e9b06fe5d03e5e6cb4603ee83f640f0f5e45d840910f773d0afcf224c0fb59` |
 
 The normalized workbook checksum above records the historical analysis
 artifact. Rebuilding the same cell content with a different spreadsheet-library
@@ -196,13 +196,13 @@ python3 scripts/build_eve_artifacts.py
 Manual download commands, equivalent to the download step in the script:
 
 ```sh
-mkdir -p dataset/eve
+mkdir -p data/eve
 
 curl -ksS "https://evemodel.org/api/proteins/web_pid/BRCA1_HUMAN/download/?variants=True" \
-  -o dataset/eve/BRCA1_HUMAN.EVE.variants.zip
+  -o data/eve/BRCA1_HUMAN.EVE.variants.zip
 
 curl -ksS "https://evemodel.org/api/proteins/web_pid/BRCA2_HUMAN/download/?variants=True" \
-  -o dataset/eve/BRCA2_HUMAN.EVE.variants.zip
+  -o data/eve/BRCA2_HUMAN.EVE.variants.zip
 ```
 
 `curl -k` was used because the local Python TLS stack rejected the certificate chain in this environment. The saved source URLs are HTTPS EVE endpoints.
@@ -236,7 +236,7 @@ ASM was selected because it is the primary EVE score/class set used by the EVE s
 The normalized workbook is:
 
 ```text
-dataset/eve/EVE_BRCA12_scores.xlsx
+data/eve/EVE_BRCA12_scores.xlsx
 ```
 
 It contains:
@@ -266,7 +266,7 @@ Generation steps:
 1. Run `scripts/build_eve_artifacts.py` from the repository root.
 2. The script downloads or reuses `BRCA1_HUMAN.EVE.variants.zip` and `BRCA2_HUMAN.EVE.variants.zip`.
 3. The script verifies the downloaded archive SHA256 hashes by default.
-4. The script reads `dataset/SUPP_TABLES_BRCA12_APR_2026.xlsx`.
+4. The script reads `data/SUPP_TABLES_BRCA12_APR_2026.xlsx`.
 5. It reads `Sup Table 1` for BRCA1 and `Sup Table 2` for BRCA2 with `header=1`.
 6. It reads each EVE source zip member CSV.
 7. It keeps `wt_aa`, `position`, `mt_aa`, `EVE_scores_ASM`, and `EVE_classes_75_pct_retained_ASM`.
@@ -274,7 +274,7 @@ Generation steps:
 9. It left-joins each master table to EVE by `T2`, `T3`, and `T4`.
 10. It preserves master-table row order and adds a 1-based `INDEX`.
 11. It adds `EVE Source` as `<zip file>:<csv member>`.
-12. It writes `dataset/eve/EVE_BRCA12_scores.xlsx`.
+12. It writes `data/eve/EVE_BRCA12_scores.xlsx`.
 
 The implementation of these steps is in:
 
@@ -334,11 +334,11 @@ The code uses EVE's author-provided `EVE_classes_75_pct_retained_ASM` classes:
 | `Uncertain` | 0 |
 | missing score/class | 0 |
 
-This is implemented in `brca_integration.tables.sup_table_18_19` by `_eve_points`.
+This is implemented in `src/sup_table_18_19.py` by `_eve_points`.
 
 ## Code Changes
 
-### brca_integration.tables.sup_table_18_19
+### src/sup_table_18_19.py
 
 Changes:
 
@@ -351,7 +351,7 @@ Changes:
 - Added `_eve_points`.
 - Removed CPT-1 thresholding from the active implementation.
 - Kept `ACMG PP3/BP4 in silico predictor points` as the integration column, but now computes it from EVE classes.
-- Stopped loading `ACMG PP3/BP4 in silico predictor points` from `dataset/ACMG_other_points.xlsx` to avoid retaining the old AlphaMissense-derived points.
+- Stopped loading `ACMG PP3/BP4 in silico predictor points` from `data/ACMG_other_points.xlsx` to avoid retaining the old AlphaMissense-derived points.
 - The command-line option remains `--predictor`; `--alpha` is still accepted only as a deprecated compatibility alias.
 
 ### main.py
@@ -359,7 +359,7 @@ Changes:
 The Sup Table 18/19 writer now receives:
 
 ```text
-dataset/eve/EVE_BRCA12_scores.xlsx
+data/eve/EVE_BRCA12_scores.xlsx
 ```
 
 ## Generated Output Checks
@@ -431,7 +431,7 @@ Final classification transitions caused by the EVE substitution:
 Syntax check:
 
 ```sh
-python3 -m py_compile scripts/build_eve_artifacts.py src/brca_integration/tables/sup_table_18_19.py main.py
+python3 -m py_compile scripts/build_eve_artifacts.py src/sup_table_18_19.py main.py
 ```
 
 EVE artifact generation check using cached downloads:
@@ -445,10 +445,10 @@ python3 scripts/build_eve_artifacts.py \
 Isolated Sup Table 18/19 writer check:
 
 ```sh
-PYTHONPATH=src python3 -m brca_integration.tables.sup_table_18_19 dataset/SUPP_TABLES_BRCA12_APR_2026.xlsx \
+PYTHONPATH=src python3 -m sup_table_18_19 data/SUPP_TABLES_BRCA12_APR_2026.xlsx \
   -o /private/tmp/sup18_19_eve_test.xlsx \
   --predictor /private/tmp/EVE_BRCA12_scores_test.xlsx \
-  --other-points dataset/ACMG_other_points.xlsx
+  --other-points data/ACMG_other_points.xlsx
 ```
 
 Full workbook regeneration:

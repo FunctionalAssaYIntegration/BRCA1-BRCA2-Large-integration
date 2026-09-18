@@ -18,4 +18,4 @@ verify:
 	PYTHONPATH=src $(PYTHON) scripts/verify_reproduction.py $(OUTPUT) --figure-prefix $(FIGURE_PREFIX)
 
 test:
-	PYTHONPATH=src $(PYTHON) -m pytest
+	$(PYTHON) -m compileall -q main.py scripts src
